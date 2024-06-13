@@ -1,15 +1,15 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import PokemonCard from '../components/PokemonCard';
-import usePokemonStore from '../stores/pokemonStore';
 
 const PokemonPage = () => {
   const { name } = useParams();
-  const { catchPokemon } = usePokemonStore();
+  const navigate = useNavigate();
 
   return (
     <div>
-      <PokemonCard name={name} onCatch={catchPokemon} />
+      <button className="back-button" onClick={() => navigate('/')}>Back to Homepage</button>
+      <PokemonCard name={name} />
     </div>
   );
 };

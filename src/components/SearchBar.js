@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, onShowCaught }) => {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e) => {
@@ -11,7 +11,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="search-bar">
       <input
         type="text"
         value={query}
@@ -19,6 +19,7 @@ const SearchBar = ({ onSearch }) => {
         placeholder="Search Pokemon"
       />
       <button type="submit">Search</button>
+      <button type="button" onClick={onShowCaught}>Caught</button>
     </form>
   );
 };

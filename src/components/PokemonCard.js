@@ -1,35 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
 import usePokemon from '../hooks/usePokemon';
+import usePokemonStore from '../stores/pokemonStore';
 
-const PokemonCard = ({ name, onCatch }) => {
+const PokemonCard = forwardRef(({ name, showRemoveButton = false }, ref) => {
   const { pokemon, loading, error } = usePokemon(name);
-  const [pokemonData, setPokemonData] = useState(null);
+  const { caughtPokemon, catchPokemon, removePokemon } = usePokemonStore();
+  const [isCaught, setIsCaught] = useState(false);
 
   useEffect(() => {
-    setPokemonData(pokemon);
-  }, [pokemon]);
+    setIsCaught(caughtPokemon.includes(name));
+  }, [caughtPokemon, name]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-  if (!pokemonData) return null;
+  if (!pokemon) return null;
 
   return (
-    <div className="pokemon-card">
-      <h3>{pokemonData.name}</h3>
-      <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
-      <p>Type: {pokemonData.types.map((type) => type.type.name).join(', ')}</p>
-      <p>Abilities: {pokemonData.abilities.map((ability) => ability.ability.name).join(', ')}</p>
+    <div className={`pokemon-card ${isCaught ? 'caught' : ''}`} ref={ref}>
+      <h3>{pokemon.name}</h3>
+      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+      <p>Type: {pokemon.types.map((type) => type.type.name).join(', ')}</p>
+      <p>Abilities: {pokemon.abilities.map((ability) => ability.ability.name).join(', ')}</p>
       <p>Stats:</p>
       <ul>
-        {pokemonData.stats.map((stat) => (
+        {pokemon.stats.map((stat) => (
           <li key={stat.stat.name}>
             {stat.stat.name}: {stat.base_stat}
           </li>
         ))}
       </ul>
-      <button onClick={() => onCatch(pokemonData.name)}>Catch</button>
+      {isCaught ? (
+        <>
+          <p className="caught-status">Caught</p>
+          {showRemoveButton && <button onClick={() => removePokemon(name)} className="remove-button">Remove</button>}
+        </>
+      ) : (
+        <button onClick={() => catchPokemon(name)}>Catch</button>
+      )}
     </div>
   );
-};
+});
 
 export default PokemonCard;

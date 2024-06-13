@@ -6,6 +6,10 @@ const usePokemonStore = create((set) => ({
     set((state) => ({
       caughtPokemon: [...state.caughtPokemon, pokemon],
     })),
+  removePokemon: (pokemon) =>
+    set((state) => ({
+      caughtPokemon: state.caughtPokemon.filter((p) => p !== pokemon),
+    })),
 }));
 
 export default usePokemonStore;
