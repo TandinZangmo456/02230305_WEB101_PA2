@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from '../components/SearchBar';
 import PokemonCard from '../components/PokemonCard';
 import CaughtPokemonList from '../components/CaughtPokemonList';
@@ -7,11 +7,11 @@ import usePokemonStore from '../stores/pokemonStore';
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [pokemonList, setPokemonList] = useState([]);
-  const [nextUrl, setNextUrl] = useState('https://pokeapi.co/api/v2/pokemon?limit=20');
-  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [showCaught, setShowCaught] = useState(false);
   const { catchPokemon } = usePokemonStore();
-  const observer = useRef();
+  const pageSize = 20;
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -27,39 +27,20 @@ const HomePage = () => {
     setSearchQuery('');
   };
 
-  const loadMorePokemon = useCallback(() => {
-    if (!nextUrl) return;
-    setLoading(true);
-    fetch(nextUrl)
+  const fetchPokemon = (page) => {
+    const offset = (page - 1) * pageSize;
+    fetch(`https://pokeapi.co/api/v2/pokemon?limit=${pageSize}&offset=${offset}`)
       .then((response) => response.json())
       .then((data) => {
-        setPokemonList((prevList) => [...prevList, ...data.results]);
-        setNextUrl(data.next);
-        setLoading(false);
+        setPokemonList(data.results);
+        setTotalPages(Math.ceil(data.count / pageSize));
       })
-      .catch((error) => {
-        console.error('Error fetching Pokémon list:', error);
-        setLoading(false);
-      });
-  }, [nextUrl]);
+      .catch((error) => console.error('Error fetching Pokémon list:', error));
+  };
 
   useEffect(() => {
-    loadMorePokemon();
-  }, [loadMorePokemon]);
-
-  const lastPokemonElementRef = useCallback(
-    (node) => {
-      if (loading) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          loadMorePokemon();
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [loading, loadMorePokemon]
-  );
+    fetchPokemon(currentPage);
+  }, [currentPage]);
 
   return (
     <div className="app-container">
@@ -68,26 +49,33 @@ const HomePage = () => {
       {showCaught ? (
         <CaughtPokemonList onBack={handleBack} />
       ) : searchQuery ? (
-        <PokemonCard name={searchQuery} onCatch={catchPokemon} />
+        <PokemonCard name={searchQuery} />
       ) : (
-        <div className="pokemon-list">
-          {pokemonList.map((pokemon, index) => {
-            if (index === pokemonList.length - 1) {
-              return (
-                <PokemonCard
-                  key={pokemon.name}
-                  name={pokemon.name}
-                  onCatch={catchPokemon}
-                  ref={lastPokemonElementRef}
-                />
-              );
-            } else {
-              return <PokemonCard key={pokemon.name} name={pokemon.name} onCatch={catchPokemon} />;
-            }
-          })}
+        <div>
+          <div className="pokemon-list">
+            {pokemonList.map((pokemon) => (
+              <PokemonCard key={pokemon.name} name={pokemon.name} onCatch={catchPokemon} />
+            ))}
+          </div>
+          <div className="pagination">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </div>
       )}
-      {loading && <p>Loading...</p>}
     </div>
   );
 };
