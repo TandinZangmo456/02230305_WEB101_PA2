@@ -1,4 +1,5 @@
-Pokedex Application 
+#Pokedex Application 
+
 This project shows the basic Pokedex application created with React; Zustand as the state manager, and API requests to retrieve Pokemon information. First, in the application it supports user to search for Pokemon, On different page the application also supports user to view detail of certain Pokemon and the list of Pokemon which the use caught. 
  
  Features 
