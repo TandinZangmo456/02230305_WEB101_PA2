@@ -1,70 +1,43 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Pokedex Application 
+This project shows the basic Pokedex application created with React; Zustand as the state manager, and API requests to retrieve Pokemon information. First, in the application it supports user to search for Pokemon, On different page the application also supports user to view detail of certain Pokemon and the list of Pokemon which the use caught. 
+ 
+ Features 
+ Search Functionality: Pokemons have names and users are allowed to search for them using the name. 
+ Pagination: The application shows the Pokemon in form of a paginated list meaning that you can go the next page when the page is exhausted. 
+ Pokemon Details: Information on the particular Pokemon which is chosen is presented which involves its types, abilities and statistics. 
+ Caught Pokemon Management: Through this it is possible for the users to indicate that they have caught a specific Pokemon and therefore can filter it out from the list. 
+ State Management: Zustand is used more for organization and to maintain global state such as the list of caught Pokemon. 
+ Components 
+ HomePage 
+ The principal autority which forms the layout of the application. It includes: 
+ 
+ A search bar specifically for the Pokemon series of games. 
+ A button or a switch to switch from viewing all the Pokemon and the ones the player has caught. 
+ Buttons for turning the pages of the list of Pokemon and moving through them. 
+ Using conditional rendering to display all the Pokemon and if the user has only caught some to display only the caught ones. 
+ 
+ 
+ PokemonCard 
+ 
+ A component that holds the little details of a given Pokemon. It shows: 
+ Pokemon’s name, the image of Pokemon, the types, abilities, stat values. 
+ A “Catch” button adjacent to the pokemon to transfer it to the caught list. 
+ A optional button that removes the Pokemon from the caught list only if the Pokemon is caught. 
+ 
+ CaughtPokemonList 
+ Shows the account caught Pokemon in a paginated manner. It includes: 
+ Arrows to switch from one page to another. 
+ Elements such as the current and total page numbers. 
+ 
+PokemonDetails 
+ Displays information about a Pokemon of choice obtained from the PokeAPI. It displays: 
+ 
+ The Pokemon’s name, design, type/s, ability/s, and stats without delving into details [much]. 
+ usePokemon 
+ A hook that makes API request to PokeAPI to get data for a certain Pokemon and handling the state of the received data. 
+ 
+ usePokemonStore 
+ An open store to track the status of the caught Pokémon in a different part of the world. They give actions for capturing and releasing Pokemon from the list. 
+ 
+ Usage 
+ To execute the application, be certain you have Node. js installed and follow these steps:js installed and follow these steps:
